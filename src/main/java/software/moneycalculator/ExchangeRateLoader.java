@@ -1,5 +1,6 @@
 package software.moneycalculator;
 
+
 import java.io.IOException;
 
 public interface ExchangeRateLoader {
