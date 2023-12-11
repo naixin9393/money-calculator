@@ -1,19 +1,19 @@
 package software.moneycalculator.gui.swing;
 
 import software.moneycalculator.Currency;
-import software.moneycalculator.gui.CurrencyDialog;
+import software.moneycalculator.gui.CurrencyComboBox;
 
 import javax.swing.*;
 import java.util.List;
 
-public class SwingCurrencyDialog extends JComboBox<Currency> implements CurrencyDialog {
+public class SwingCurrencyComboBox extends JComboBox<Currency> implements CurrencyComboBox {
     @Override
     public Currency get() {
         return this.getItemAt(this.getSelectedIndex());
     }
 
     @Override
-    public CurrencyDialog define(List<Currency> currencies) {
+    public CurrencyComboBox define(List<Currency> currencies) {
         for (Currency currency : currencies) {
             this.addItem(currency);
         }

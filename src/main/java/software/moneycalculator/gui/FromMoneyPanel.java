@@ -5,8 +5,8 @@ import software.moneycalculator.Money;
 
 import java.util.List;
 
-public interface MoneyDialog {
+public interface FromMoneyPanel {
     Money get();
-    MoneyDialog define(List<Currency> currencies);
+    FromMoneyPanel define(List<Currency> currencies);
     void setCurrency(Currency currency);
 }

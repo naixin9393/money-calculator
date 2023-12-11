@@ -1,14 +1,14 @@
 package software.moneycalculator.gui.swing;
 
 
+import software.moneycalculator.gui.ToMoneyPanel;
 import software.moneycalculator.gui.commands.Command;
 import software.moneycalculator.Currency;
 import software.moneycalculator.gui.commands.ExchangeMoneyCommand;
 import software.moneycalculator.gui.commands.SwapCurrenciesCommand;
 import software.moneycalculator.exchangerateapi.ERAPICurrencyLoader;
 import software.moneycalculator.exchangerateapi.ERAPIExchangeRateLoader;
-import software.moneycalculator.gui.CurrencyDialog;
-import software.moneycalculator.gui.MoneyDialog;
+import software.moneycalculator.gui.FromMoneyPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,23 +17,20 @@ import java.util.List;
 import java.util.Map;
 
 public class SwingMain extends JFrame {
-    private MoneyDialog fromMoneyDialog;
-    private SwingMoneyDisplay moneyDisplay;
-    private CurrencyDialog currencyDialog;
+    private FromMoneyPanel fromMoneyPanel;
+    private ToMoneyPanel toMoneyPanel;
     private final Map<String, Command> commands = new HashMap<>();
 
     public static void main(String[] args) {
         SwingMain main = new SwingMain();
         List<Currency> currencies = new ERAPICurrencyLoader().load();
         main.add("swap currencies", new SwapCurrenciesCommand(
-                main.moneyDialog(),
-                main.currencyDialog
+                main.fromMoneyPanel(),
+                main.toMoneyPanel()
         ));
         main.add("convert money", new ExchangeMoneyCommand(
-                main.moneyDialog().define(currencies),
-                main.currencyDialog().define(currencies),
-                main.moneyDisplay(),
-                new ERAPIExchangeRateLoader()
+                new ERAPIExchangeRateLoader(), main.fromMoneyPanel().define(currencies),
+                main.toMoneyPanel().define(currencies)
         ));
         main.setVisible(true);
     }
@@ -55,20 +52,13 @@ public class SwingMain extends JFrame {
     private JPanel createMainPanel() {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.add(createMoneyDialog());
+        panel.add(createFromMoneyPanel());
         panel.add(createToMoneyPanel());
-        panel.add(toolBar());
+        panel.add(createToolBar());
         return panel;
     }
 
-    private Component createToMoneyPanel() {
-        JPanel panel = new JPanel();
-        panel.add(createMoneyDisplay());
-        panel.add(createCurrencyDialog());
-        return panel;
-    }
-
-    private Component toolBar() {
+    private Component createToolBar() {
         JPanel panel = new JPanel();
         panel.add(createConvertButton());
         panel.add(createSwapCurrenciesButton());
@@ -87,31 +77,23 @@ public class SwingMain extends JFrame {
         return button;
     }
 
-    private Component createCurrencyDialog() {
-        SwingCurrencyDialog dialog = new SwingCurrencyDialog();
-        this.currencyDialog = dialog;
-        return dialog;
+    private Component createFromMoneyPanel() {
+        SwingFromMoneyPanel panel = new SwingFromMoneyPanel();
+        this.fromMoneyPanel = panel;
+        return panel;
     }
 
-    private Component createMoneyDisplay() {
-        SwingMoneyDisplay display = new SwingMoneyDisplay();
-        this.moneyDisplay = display;
-        return display;
+    private Component createToMoneyPanel() {
+        SwingToMoneyPanel panel = new SwingToMoneyPanel();
+        this.toMoneyPanel = panel;
+        return panel;
     }
 
-    private Component createMoneyDialog() {
-        SwingMoneyDialog dialog = new SwingMoneyDialog();
-        this.fromMoneyDialog = dialog;
-        return dialog;
+    public FromMoneyPanel fromMoneyPanel() {
+        return fromMoneyPanel;
     }
 
-    public SwingMoneyDisplay moneyDisplay() {
-        return moneyDisplay;
-    }
-    public CurrencyDialog currencyDialog() {
-        return currencyDialog;
-    }
-    public MoneyDialog moneyDialog() {
-        return fromMoneyDialog;
+    private ToMoneyPanel toMoneyPanel() {
+        return toMoneyPanel;
     }
 }

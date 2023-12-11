@@ -4,8 +4,8 @@ import software.moneycalculator.Currency;
 
 import java.util.List;
 
-public interface CurrencyDialog {
+public interface CurrencyComboBox {
     Currency get();
-    CurrencyDialog define(List<Currency> currencies);
+    CurrencyComboBox define(List<Currency> currencies);
     void set(Currency currency);
 }
