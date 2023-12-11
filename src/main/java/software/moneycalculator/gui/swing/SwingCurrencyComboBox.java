@@ -13,11 +13,10 @@ public class SwingCurrencyComboBox extends JComboBox<Currency> implements Curren
     }
 
     @Override
-    public CurrencyComboBox define(List<Currency> currencies) {
+    public void define(List<Currency> currencies) {
         for (Currency currency : currencies) {
             this.addItem(currency);
         }
-        return this;
     }
 
     @Override

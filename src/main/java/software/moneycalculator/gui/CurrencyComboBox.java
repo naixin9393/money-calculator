@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface CurrencyComboBox {
     Currency get();
-    CurrencyComboBox define(List<Currency> currencies);
+    void define(List<Currency> currencies);
     void set(Currency currency);
 }
