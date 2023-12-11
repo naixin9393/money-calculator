@@ -1,5 +1,6 @@
-package software.moneycalculator;
+package software.moneycalculator.gui.commands;
 
+import software.moneycalculator.Currency;
 import software.moneycalculator.gui.CurrencyDialog;
 import software.moneycalculator.gui.MoneyDialog;
 

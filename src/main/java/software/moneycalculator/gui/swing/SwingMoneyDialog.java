@@ -48,7 +48,7 @@ public class SwingMoneyDialog extends JPanel implements MoneyDialog {
 
     private Component createAmountField() {
         JTextField textField = new JTextField();
-        textField.setColumns(6);
+        textField.setColumns(5);
         textField.setText("0.00");
         this.amountField = textField;
         return textField;

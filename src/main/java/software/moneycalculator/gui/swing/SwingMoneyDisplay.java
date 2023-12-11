@@ -4,10 +4,11 @@ import software.moneycalculator.gui.MoneyDisplay;
 
 import javax.swing.*;
 
-public class SwingMoneyDisplay extends JLabel implements MoneyDisplay {
+public class SwingMoneyDisplay extends JTextField implements MoneyDisplay {
     public SwingMoneyDisplay() {
-        this.setSize(6, 1);
+        setColumns(5);
         this.setText("0.00");
+        this.setFocusable(false);
     }
 
     @Override
