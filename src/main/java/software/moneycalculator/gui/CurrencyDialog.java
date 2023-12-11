@@ -7,4 +7,5 @@ import java.util.List;
 public interface CurrencyDialog {
     Currency get();
     CurrencyDialog define(List<Currency> currencies);
+    void set(Currency currency);
 }

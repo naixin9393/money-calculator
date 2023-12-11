@@ -34,6 +34,11 @@ public class SwingMoneyDialog extends JPanel implements MoneyDialog {
         return this;
     }
 
+    @Override
+    public void setCurrency(Currency currency) {
+        this.currencyDialog.set(currency);
+    }
+
     private Component createCurrencyDialog(List<Currency> currencies) {
         SwingCurrencyDialog dialog = new SwingCurrencyDialog();
         dialog.define(currencies);
@@ -44,6 +49,7 @@ public class SwingMoneyDialog extends JPanel implements MoneyDialog {
     private Component createAmountField() {
         JTextField textField = new JTextField();
         textField.setColumns(6);
+        textField.setText("0.00");
         this.amountField = textField;
         return textField;
     }

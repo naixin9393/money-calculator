@@ -19,4 +19,9 @@ public class SwingCurrencyDialog extends JComboBox<Currency> implements Currency
         }
         return this;
     }
+
+    @Override
+    public void set(Currency currency) {
+        this.setSelectedItem(currency);
+    }
 }

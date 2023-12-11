@@ -8,4 +8,5 @@ import java.util.List;
 public interface MoneyDialog {
     Money get();
     MoneyDialog define(List<Currency> currencies);
+    void setCurrency(Currency currency);
 }
