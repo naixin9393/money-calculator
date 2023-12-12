@@ -22,9 +22,9 @@ public class SwingMainFrame extends JFrame {
     public SwingMainFrame() throws HeadlessException {
         try {
             properties.load(SwingMainFrame.class.getClassLoader().getResourceAsStream(ConfigFile));
-            this.setTitle(properties.getProperty("app.name"));
-            this.setSize(400, 300);
-            this.setIconImage(new ImageIcon("src/main/resources/icon.png").getImage());
+            this.setTitle(appName());
+            this.setIconImage(appImage());
+            this.setSize(400, 180);
             this.setLocationRelativeTo(null);
             this.setLayout(new FlowLayout());
             this.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -33,6 +33,14 @@ public class SwingMainFrame extends JFrame {
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Error loading config file: " + ConfigFile, "Error", JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+    private static Image appImage() {
+        return new ImageIcon(properties.getProperty("app.icon")).getImage();
+    }
+
+    private static String appName() {
+        return properties.getProperty("app.name");
     }
 
     private JMenuBar createMenuBar() {
@@ -51,14 +59,8 @@ public class SwingMainFrame extends JFrame {
 
     private Component createAboutItem() {
         JMenuItem item = new JMenuItem("About");
-        item.addActionListener(e -> JOptionPane.showMessageDialog(this, aboutMessage(), "About " + properties.getProperty("app.name"), JOptionPane.INFORMATION_MESSAGE));
+        item.addActionListener(e -> new SwingAboutDialog().define(properties));
         return item;
-    }
-
-    private String aboutMessage() {
-        return properties.getProperty("app.name") + " " + properties.getProperty("app.version") + "\n" +
-                properties.getProperty("app.author") + "\n" +
-                properties.getProperty("app.author.url") + "\n";
     }
 
     private Component createRunMenu() {
