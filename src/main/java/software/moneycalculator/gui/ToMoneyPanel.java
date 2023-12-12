@@ -1,7 +1,6 @@
 package software.moneycalculator.gui;
 
 import software.moneycalculator.Currency;
-
 import java.util.List;
 
 public interface ToMoneyPanel {

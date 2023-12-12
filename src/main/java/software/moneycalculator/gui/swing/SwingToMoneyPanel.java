@@ -10,12 +10,11 @@ import java.util.List;
 
 public class SwingToMoneyPanel extends JPanel implements ToMoneyPanel {
     private JTextField amountField;
+    private CurrencyComboBox currencyComboBox;
 
     public SwingToMoneyPanel() {
         setLayout(new FlowLayout());
     }
-
-    private CurrencyComboBox currencyComboBox;
 
     @Override
     public ToMoneyPanel define(List<Currency> currencies) {

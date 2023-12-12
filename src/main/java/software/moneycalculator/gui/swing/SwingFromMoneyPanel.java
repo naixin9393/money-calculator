@@ -11,12 +11,11 @@ import java.util.List;
 
 public class SwingFromMoneyPanel extends JPanel implements FromMoneyPanel {
     private JTextField amountField;
+    private CurrencyComboBox currencyComboBox;
 
     public SwingFromMoneyPanel() {
         this.setLayout(new FlowLayout());
     }
-
-    private CurrencyComboBox currencyComboBox;
 
     @Override
     public Money get() {

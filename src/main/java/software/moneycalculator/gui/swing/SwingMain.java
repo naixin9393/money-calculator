@@ -39,7 +39,6 @@ public class SwingMain extends JFrame {
         commands.put(name, command);
     }
 
-
     public SwingMain() throws HeadlessException {
         this.setTitle("Money calculator");
         this.setSize(400, 200);
