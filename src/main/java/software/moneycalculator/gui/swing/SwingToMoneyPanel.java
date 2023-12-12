@@ -19,11 +19,11 @@ public class SwingToMoneyPanel extends JPanel implements ToMoneyPanel {
     @Override
     public ToMoneyPanel define(List<Currency> currencies) {
         add(createTextField());
-        add(createCurrencyCombobox(currencies));
+        add(createCurrencyComboBox(currencies));
         return this;
     }
 
-    private Component createCurrencyCombobox(List<Currency> currencies) {
+    private Component createCurrencyComboBox(List<Currency> currencies) {
         SwingCurrencyComboBox comboBox = new SwingCurrencyComboBox();
         comboBox.define(currencies);
         this.currencyComboBox = comboBox;
