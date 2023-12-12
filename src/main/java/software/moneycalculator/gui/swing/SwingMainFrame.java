@@ -13,7 +13,7 @@ import java.util.Properties;
 
 public class SwingMainFrame extends JFrame {
     private static final String ConfigFile = "config.properties";
-    private static Properties properties = new Properties();
+    private static final Properties properties = new Properties();
     private FromMoneyPanel fromMoneyPanel;
     private ToMoneyPanel toMoneyPanel;
     private ExchangeRateUpdateLabel exchangeRateUpdateLabel;
@@ -22,17 +22,17 @@ public class SwingMainFrame extends JFrame {
     public SwingMainFrame() throws HeadlessException {
         try {
             properties.load(SwingMainFrame.class.getClassLoader().getResourceAsStream(ConfigFile));
+            this.setTitle(properties.getProperty("app.name"));
+            this.setSize(400, 300);
+            this.setIconImage(new ImageIcon("src/main/resources/icon.png").getImage());
+            this.setLocationRelativeTo(null);
+            this.setLayout(new FlowLayout());
+            this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+            this.setJMenuBar(createMenuBar());
+            this.add(createMainPanel());
         } catch (IOException e) {
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error loading config file: " + ConfigFile, "Error", JOptionPane.ERROR_MESSAGE);
         }
-        this.setTitle(properties.getProperty("app.name"));
-        this.setSize(400, 300);
-        this.setIconImage(new ImageIcon("src/main/resources/icon.png").getImage());
-        this.setLocationRelativeTo(null);
-        this.setLayout(new FlowLayout());
-        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        this.setJMenuBar(createMenuBar());
-        this.add(createMainPanel());
     }
 
     private JMenuBar createMenuBar() {
