@@ -48,7 +48,8 @@ public class SwingMain extends JFrame {
 
     public SwingMain() throws HeadlessException {
         this.setTitle("Money calculator");
-        this.setSize(400, 200);
+        this.setSize(400, 170);
+        this.setIconImage(new ImageIcon("src/main/resources/icon.png").getImage());
         this.setLocationRelativeTo(null);
         this.setLayout(new FlowLayout());
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
