@@ -24,7 +24,11 @@ public class SwingFromMoneyPanel extends JPanel implements FromMoneyPanel {
     }
 
     private double toDouble(String text) {
-        return Double.parseDouble(text);
+        try {
+            return Double.parseDouble(text);
+        } catch (NumberFormatException e) {
+            return 0;
+        }
     }
 
     @Override
