@@ -1,59 +1,95 @@
 package software.moneycalculator.gui.swing;
 
-import com.formdev.flatlaf.intellijthemes.FlatCarbonIJTheme;
 import software.moneycalculator.gui.ExchangeRateUpdateLabel;
 import software.moneycalculator.gui.ToMoneyPanel;
 import software.moneycalculator.gui.commands.Command;
-import software.moneycalculator.Currency;
-import software.moneycalculator.gui.commands.ExchangeMoneyCommand;
-import software.moneycalculator.gui.commands.SwapCurrenciesCommand;
-import software.moneycalculator.exchangerateapi.ERAPICurrencyLoader;
-import software.moneycalculator.exchangerateapi.ERAPIExchangeRateLoader;
 import software.moneycalculator.gui.FromMoneyPanel;
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
-public class SwingMain extends JFrame {
+public class SwingMainFrame extends JFrame {
+    private static final String ConfigFile = "config.properties";
+    private static Properties properties = new Properties();
     private FromMoneyPanel fromMoneyPanel;
     private ToMoneyPanel toMoneyPanel;
     private ExchangeRateUpdateLabel exchangeRateUpdateLabel;
     private final Map<String, Command> commands = new HashMap<>();
 
-    public static void main(String[] args) {
+    public SwingMainFrame() throws HeadlessException {
         try {
-            FlatCarbonIJTheme.setup();
-        } catch (Exception e) {
-            System.out.println("Error setting native LAF: " + e);
+            properties.load(SwingMainFrame.class.getClassLoader().getResourceAsStream(ConfigFile));
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        SwingMain main = new SwingMain();
-        List<Currency> currencies = new ERAPICurrencyLoader().load();
-        main.add("swap currencies", new SwapCurrenciesCommand(
-                main.fromMoneyPanel(),
-                main.toMoneyPanel()
-        ));
-        main.add("convert money", new ExchangeMoneyCommand(
-                new ERAPIExchangeRateLoader(), main.fromMoneyPanel().define(currencies),
-                main.toMoneyPanel().define(currencies),
-                main.exchangeRateUpdateLabel()
-        ));
-        main.setVisible(true);
-    }
-
-    private void add(String name, Command command) {
-        commands.put(name, command);
-    }
-
-    public SwingMain() throws HeadlessException {
-        this.setTitle("Money calculator");
-        this.setSize(400, 170);
+        this.setTitle(properties.getProperty("app.name"));
+        this.setSize(400, 300);
         this.setIconImage(new ImageIcon("src/main/resources/icon.png").getImage());
         this.setLocationRelativeTo(null);
         this.setLayout(new FlowLayout());
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.setJMenuBar(createMenuBar());
         this.add(createMainPanel());
+    }
+
+    private JMenuBar createMenuBar() {
+        JMenuBar menuBar = new JMenuBar();
+        menuBar.add(createFileMenu());
+        menuBar.add(createRunMenu());
+        menuBar.add(createHelpMenu());
+        return menuBar;
+    }
+
+    private Component createHelpMenu() {
+        JMenu menu = new JMenu("Help");
+        menu.add(createAboutItem());
+        return menu;
+    }
+
+    private Component createAboutItem() {
+        JMenuItem item = new JMenuItem("About");
+        item.addActionListener(e -> JOptionPane.showMessageDialog(this, aboutMessage(), "About " + properties.getProperty("app.name"), JOptionPane.INFORMATION_MESSAGE));
+        return item;
+    }
+
+    private String aboutMessage() {
+        return properties.getProperty("app.name") + " " + properties.getProperty("app.version") + "\n" +
+                properties.getProperty("app.author") + "\n" +
+                properties.getProperty("app.author.url") + "\n";
+    }
+
+    private Component createRunMenu() {
+        JMenu menu = new JMenu("Run");
+        menu.add(createConvertItem());
+        menu.add(createSwapItem());
+        return menu;
+    }
+
+    private Component createSwapItem() {
+        JMenuItem item = new JMenuItem("Swap");
+        item.addActionListener(e -> commands.get("swap currencies").execute());
+        return item;
+    }
+
+    private Component createConvertItem() {
+        JMenuItem item = new JMenuItem("Convert");
+        item.addActionListener(e -> commands.get("convert money").execute());
+        return item;
+    }
+
+    private Component createFileMenu() {
+        JMenu menu = new JMenu("File");
+        menu.add(createExitItem());
+        return menu;
+    }
+
+    private Component createExitItem() {
+        JMenuItem item = new JMenuItem("Exit");
+        item.addActionListener(e -> this.dispose());
+        return item;
     }
 
     private JPanel createMainPanel() {
@@ -108,11 +144,15 @@ public class SwingMain extends JFrame {
         return fromMoneyPanel;
     }
 
-    private ToMoneyPanel toMoneyPanel() {
+    public ToMoneyPanel toMoneyPanel() {
         return toMoneyPanel;
     }
 
     public ExchangeRateUpdateLabel exchangeRateUpdateLabel() {
         return exchangeRateUpdateLabel;
+    }
+
+    public void add(String name, Command command) {
+        commands.put(name, command);
     }
 }
