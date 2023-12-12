@@ -1,6 +1,7 @@
 package software.moneycalculator.gui.swing;
 
-
+import com.formdev.flatlaf.intellijthemes.FlatCarbonIJTheme;
+import software.moneycalculator.gui.ExchangeRateUpdateLabel;
 import software.moneycalculator.gui.ToMoneyPanel;
 import software.moneycalculator.gui.commands.Command;
 import software.moneycalculator.Currency;
@@ -9,7 +10,6 @@ import software.moneycalculator.gui.commands.SwapCurrenciesCommand;
 import software.moneycalculator.exchangerateapi.ERAPICurrencyLoader;
 import software.moneycalculator.exchangerateapi.ERAPIExchangeRateLoader;
 import software.moneycalculator.gui.FromMoneyPanel;
-
 import javax.swing.*;
 import java.awt.*;
 import java.util.HashMap;
@@ -19,9 +19,15 @@ import java.util.Map;
 public class SwingMain extends JFrame {
     private FromMoneyPanel fromMoneyPanel;
     private ToMoneyPanel toMoneyPanel;
+    private ExchangeRateUpdateLabel exchangeRateUpdateLabel;
     private final Map<String, Command> commands = new HashMap<>();
 
     public static void main(String[] args) {
+        try {
+            FlatCarbonIJTheme.setup();
+        } catch (Exception e) {
+            System.out.println("Error setting native LAF: " + e);
+        }
         SwingMain main = new SwingMain();
         List<Currency> currencies = new ERAPICurrencyLoader().load();
         main.add("swap currencies", new SwapCurrenciesCommand(
@@ -30,7 +36,8 @@ public class SwingMain extends JFrame {
         ));
         main.add("convert money", new ExchangeMoneyCommand(
                 new ERAPIExchangeRateLoader(), main.fromMoneyPanel().define(currencies),
-                main.toMoneyPanel().define(currencies)
+                main.toMoneyPanel().define(currencies),
+                main.exchangeRateUpdateLabel()
         ));
         main.setVisible(true);
     }
@@ -51,10 +58,18 @@ public class SwingMain extends JFrame {
     private JPanel createMainPanel() {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setAlignmentX(Component.CENTER_ALIGNMENT);
         panel.add(createFromMoneyPanel());
         panel.add(createToMoneyPanel());
         panel.add(createToolBar());
+        panel.add(createExchangeRateUpdateLabel());
         return panel;
+    }
+
+    private Component createExchangeRateUpdateLabel() {
+        SwingExchangeRateUpdateLabel label = new SwingExchangeRateUpdateLabel();
+        this.exchangeRateUpdateLabel = label;
+        return label;
     }
 
     private Component createToolBar() {
@@ -94,5 +109,9 @@ public class SwingMain extends JFrame {
 
     private ToMoneyPanel toMoneyPanel() {
         return toMoneyPanel;
+    }
+
+    public ExchangeRateUpdateLabel exchangeRateUpdateLabel() {
+        return exchangeRateUpdateLabel;
     }
 }

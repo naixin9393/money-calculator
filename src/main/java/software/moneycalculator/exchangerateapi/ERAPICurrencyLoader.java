@@ -18,8 +18,7 @@ public class ERAPICurrencyLoader implements CurrencyLoader {
     public List<Currency> load() {
         try {
             URL url = new URL(String.format("https://v6.exchangerate-api.com/v6/%s/codes", ExchangeRateAPI.key()));
-            String json = loadJson(url);
-            return toList(json);
+            return toList(loadJson(url));
         } catch (IOException e) {
             return Collections.emptyList();
         }
